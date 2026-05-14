@@ -113,7 +113,14 @@ void free_ast_node(struct AST_Node *node) {
   case EXPR_BIN: {
     free_ast_node(node->binex.left);
     free_ast_node(node->binex.right);
-  };
-  default: free(node);
+    break;
   }
+  case STMT_PRINT: {
+    free_ast_node(node->expr);
+    break;
+  }
+  default: break;;
+  }
+
+  free(node);
 }

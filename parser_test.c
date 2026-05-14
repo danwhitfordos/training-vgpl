@@ -212,6 +212,8 @@ VGPL_TEST(print_stmt) {
   assert(got->expr->binex.op == OP_PLUS);
   assert(got->expr->binex.left->number ==  2);
   assert(got->expr->binex.right->number == 3);
+
+  free_ast_node(got);
 }
 
 int main() {

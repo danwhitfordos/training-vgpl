@@ -9,4 +9,4 @@ void print_test_start(char *name) {
 
 #define VGPL_TEST(name) static void test_##name()
 #define VGPL_RUN(name) print_test_start(#name); test_##name();
-#
+#endif
