@@ -15,7 +15,21 @@ void lexer_int_token(struct Lexer *l, struct Token *t) {
   
   char c = l->src[l->pos];
   while(c >= '0' && c <= '9') {
-    assert(p - t->lexeme < 50);
+    assert(p - t->lexeme < LEXEME_BUF_SIZE);
+    *p++ = c;
+    c = l->src[++l->pos];
+  }
+  *p = '\0';
+}
+
+void lexer_word_token(struct Lexer *l, struct Token *t) {
+  t->type = TT_WORD;
+  
+  char *p = t->lexeme;
+  
+  char c = l->src[l->pos];
+  while(c >= 'a' && c <= 'z') {
+    assert(p - t->lexeme < LEXEME_BUF_SIZE);
     *p++ = c;
     c = l->src[++l->pos];
   }
@@ -29,6 +43,11 @@ void lexer_next_token(struct Lexer *l, struct Token *t) {
 
   if (l->src[l->pos] >= '0' && l->src[l->pos] <= '9') {
     lexer_int_token(l, t);
+    return;
+  }
+
+  if (l->src[l->pos] >= 'a' && l->src[l->pos] <= 'z') {
+    lexer_word_token(l, t);
     return;
   }
   

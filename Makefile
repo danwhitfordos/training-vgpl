@@ -19,7 +19,7 @@ test: $(TEST_BINS)
 
 
 memtest: $(TEST_BINS)
-	@echo "--- Running tests with valgrind---"
+	@echo "--- Running tests with valgrind ---"
 	@for bin in $(TEST_BINS); do \
 		echo "$$bin Running"; \
 		valgrind --leak-check=full --error-exitcode=1 ./$$bin || exit 1; \

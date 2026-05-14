@@ -78,9 +78,34 @@ VGPL_TEST(manydigits) {
   assert(got.type == TT_EOF);
 }
 
+VGPL_TEST(print_statement) {
+  struct Lexer l;
+  lexer_init(&l, "print 2+2;");
+
+  struct Token got;
+  lexer_next_token(&l, &got);
+  assert(got.type == TT_WORD);
+  assert(strcmp(got.lexeme, "print") == 0);
+
+  lexer_next_token(&l, &got);
+  assert(got.type == TT_INT);
+  assert(strcmp(got.lexeme, "2") == 0);
+
+  lexer_next_token(&l, &got);
+  assert(got.type == TT_PLUS);
+
+  lexer_next_token(&l, &got);
+  assert(got.type == TT_INT);
+  assert(strcmp(got.lexeme, "2") == 0);
+
+  lexer_next_token(&l, &got);
+  assert(got.type == TT_SC);
+}
+
 int main() {
   VGPL_RUN(empty);
   VGPL_RUN(operands);
   VGPL_RUN(expression);
   VGPL_RUN(manydigits);
+  VGPL_RUN(print_statement);
 }

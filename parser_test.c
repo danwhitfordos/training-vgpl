@@ -197,6 +197,23 @@ VGPL_TEST(parens_override_precedence) {
   free_ast_node(got);
 }
 
+VGPL_TEST(print_stmt) {
+  char * input = "print 2+3;";
+  struct Lexer l;
+  struct Parser p;
+  lexer_init(&l, input);
+  parser_init(&p, &l);
+
+  struct AST_Node *got;
+  got = parser_next_node(&p);
+
+  assert(got->type == STMT_PRINT);
+  assert(got->expr->type == EXPR_BIN);
+  assert(got->expr->binex.op == OP_PLUS);
+  assert(got->expr->binex.left->number ==  2);
+  assert(got->expr->binex.right->number == 3);
+}
+
 int main() {
   VGPL_RUN(empty);
   VGPL_RUN(onenumber);
@@ -209,4 +226,5 @@ int main() {
   VGPL_RUN(parens_add);
   VGPL_RUN(parens_multi);
   VGPL_RUN(parens_override_precedence);
+  VGPL_RUN(print_stmt);
 }

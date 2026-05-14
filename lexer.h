@@ -17,7 +17,8 @@ enum TokenType {
   TT_LB,
   TT_RB,
   TT_SC,
-  TT_INT
+  TT_INT,
+  TT_WORD
 };
 
 #define LEXEME_BUF_SIZE 50

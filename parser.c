@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 #include "parser.h"
 
@@ -73,15 +74,38 @@ struct AST_Node *parser_get_expression(struct Parser *p) {
 struct AST_Node *parser_next_node(struct Parser *p) {
   parser_advance(p);
 
-  if (p->current.type == TT_EOF) {
+  switch (p->current.type) {
+  case TT_EOF: {
     struct AST_Node *node = malloc(sizeof(struct AST_Node));
     node->type = EOF_NODE;
     return node;
   }
-  
-  struct AST_Node *node = parser_get_expression(p);
-  assert(p->current.type == TT_SC);
-  return node;
+  case TT_ERR: {
+    struct AST_Node *node = malloc(sizeof(struct AST_Node));
+    node->type = ERR_NODE;
+    return node;
+  }
+  case TT_WORD: {
+    struct AST_Node *node = malloc(sizeof(struct AST_Node));
+    if (strcmp("print", p->current.lexeme) == 0) {
+      parser_advance(p);
+      node->type = STMT_PRINT;
+      node->expr = parser_get_expression(p);
+      assert(p->current.type == TT_SC);
+      return node;
+    } else {
+      fprintf(stderr, "unknown keyword: %s\n", p->current.lexeme);
+      struct AST_Node *node = malloc(sizeof(struct AST_Node));
+      node->type = ERR_NODE;
+      return node;
+    }
+  }
+  default: {
+      struct AST_Node *node = parser_get_expression(p);
+      assert(p->current.type == TT_SC);
+      return node;
+  }
+  }
 }
 
 void free_ast_node(struct AST_Node *node) {

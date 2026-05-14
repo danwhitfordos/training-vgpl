@@ -6,7 +6,8 @@ enum AST_NODE_TYPE {
   EOF_NODE,
   ERR_NODE,
   LIT_INT,
-  EXPR_BIN
+  EXPR_BIN,
+  STMT_PRINT
 };
 
 enum BinOp {
@@ -27,6 +28,7 @@ struct AST_Node {
   union {
     int number;
     struct BinaryExpr binex;
+    struct AST_Node *expr;
   };
 };
 
