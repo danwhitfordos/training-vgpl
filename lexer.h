@@ -1,4 +1,6 @@
 #ifndef vgpl_lexer_h
+#define vgpl_lexer_h
+
 #include <stddef.h>
 
 struct Lexer {

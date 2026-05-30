@@ -1,9 +1,10 @@
-CFLAGS += -Wall -Wpedantic -Werror -Og
+CFLAGS += -Wall -Wpedantic -Werror -Og -MMD
 
 TEST_SRCS := $(wildcard *_test.c)
 TEST_BINS := $(TEST_SRCS:.c=)
 
 parser_test: lexer.o
+compiler_test: lexer.o parser.o
 
 %_test: %_test.c %.o
 	$(CC) $(CFLAGS) $^ -o $@
